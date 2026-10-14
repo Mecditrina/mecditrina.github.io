@@ -26,8 +26,8 @@ propose changes, then stop.
   people who have not agreed to be listed — not even temporarily.
 - Request-form data stays in Tally (EU-hosted). No Google Sheets / Google Forms integration.
 - No third-party requests from the pages (the legal notice relies on it). Fonts are self-hosted in `assets/fonts/`
-  (`@font-face` in `_sass/_mecditrina.scss`); libraries come from `third_party_libraries` with `download: true`, which
-  fetches them into `assets/libs/` (gitignored) at build time, so builds need network access.
+  (`@font-face` in `_sass/_mecditrina.scss`); the two JavaScript/CSS libraries are vendored in `assets/vendor/` (see
+  "Vendored libraries" below). Builds need no network access.
 - **Click-to-load rule for any embed** (forms, videos, maps…): nothing may be requested from a third party until
   the visitor clicks. Show a button plus one line naming who the content comes from, insert the iframe from a small
   inline script on click, and keep a plain link that works without JavaScript. Model: `_includes/tally-embed.liquid`
@@ -92,6 +92,28 @@ npx prettier . --write              # CI fails on unformatted files (printWidth 
   `Sitemap:` line); `false` serves the normal `robots.txt` with the sitemap. **Set `preview: false` at launch.**
 - Publishing needs a public repo (GitHub Free): then Settings → Pages → Deploy from branch `gh-pages`, `/ (root)`.
   If the deploy fails with a 403, set workflow permissions to Read and write at org level.
+
+## Vendored libraries
+
+The pages load exactly two third-party libraries, committed in `assets/vendor/` (with their licence files) and
+declared in `third_party_libraries` in `_config.yml` (`download: false`, local URLs, SRI `integrity` hashes):
+
+- Font Awesome Free (`@fortawesome/fontawesome-free`): `assets/vendor/fontawesome/css/all.min.css` and
+  `assets/vendor/fontawesome/webfonts/*.woff2` (the CSS loads `../webfonts/`).
+- vanilla-back-to-top: `assets/vendor/vanilla-back-to-top/vanilla-back-to-top.min.js`.
+
+There is no `jekyll-3rd-party-libraries` (it pinned `css_parser < 2.0`, see CVE-2026-53727) and no `al_img_tools`
+(its only purpose here was that dependency; image zoom/lightbox are not used). Do not add them back.
+
+To update a library (manually, e.g. when Dependabot or a release note calls for it):
+
+1. In a scratch folder: `npm pack @fortawesome/fontawesome-free@X.Y.Z` (or `vanilla-back-to-top@X.Y.Z`), then
+   `tar -xzf *.tgz`.
+2. Copy the same files over the ones in `assets/vendor/` (`package/css/all.min.css`, `package/webfonts/*.woff2`,
+   `package/LICENSE.txt`; or `package/dist/vanilla-back-to-top.min.js`, `package/LICENSE`).
+3. Compute the new hash: `echo "sha256-$(openssl dgst -sha256 -binary FILE | openssl base64 -A)"`, and update
+   `integrity` and `version` in `_config.yml`.
+4. Production build + PurgeCSS; check that icons render, back-to-top works and the pages make no external requests.
 
 ## Visual identity (deck of 13 Oct 2026)
 

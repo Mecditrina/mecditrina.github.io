@@ -14,7 +14,7 @@ al-folio-upgrade-report.md
 node_modules/
 output/playwright/
 test-results/
-vendor
+/vendor
 
 # Local notes (people, internal decisions): never committed
 NOTES.local.md
