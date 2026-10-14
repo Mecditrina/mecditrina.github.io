@@ -264,7 +264,6 @@ theme: al_folio_core
 
 # Plug-ins
 plugins:
-  - jekyll-3rd-party-libraries
   - jekyll-archives-v2
   - jekyll-cache-bust
   - jekyll-email-protect
@@ -296,7 +295,6 @@ plugins:
   - al_analytics
   - al_citations
   - al_ext_posts
-  - al_img_tools
   - al_search
   - al_charts
   - al_math
@@ -501,26 +499,22 @@ enable_video_embedding: false # enables video embedding for bibtex entries. If f
 # Library versions
 # -----------------------------------------------------------------------------
 
-# Add the url, version and integrity hash of the libraries you use in your site.
-# The integrity hash is used to ensure that the library is not tampered with.
-# Integrity hashes not provided by the libraries were generated using https://www.srihash.org/
+# Libraries the pages load. They are vendored (committed) in assets/vendor/ and served from this site, so builds
+# need no network access and the pages make no third-party requests. The integrity hashes are those of the vendored
+# files (identical to the npm releases). To update a library, see "Vendored libraries" in CLAUDE.md.
 third_party_libraries:
-  download: true # self-host: no third-party requests from the pages. If true, download the versions of the libraries specified below and use the downloaded files
-  # Only the libraries the pages actually load are listed; add one back (with its integrity hash) only if a page needs it.
+  download: false # files are already vendored in assets/vendor/; nothing is downloaded at build time
   fontawesome:
     integrity:
       css: "sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c="
-    local:
-      fonts: "../webfonts/" # all.min.css loads its fonts from ../webfonts/
     url:
-      css: "https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@{{version}}/css/all.min.css"
-      fonts: "https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@{{version}}/webfonts/"
-    version: "7.2.0"
+      css: "/assets/vendor/fontawesome/css/all.min.css" # loads ../webfonts/*.woff2
+    version: "7.2.0" # @fortawesome/fontawesome-free
   vanilla-back-to-top:
     integrity:
       js: "sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg="
     url:
-      js: "https://cdn.jsdelivr.net/npm/vanilla-back-to-top@{{version}}/dist/vanilla-back-to-top.min.js"
+      js: "/assets/vendor/vanilla-back-to-top/vanilla-back-to-top.min.js"
     version: "7.2.1"
 
 # -----------------------------------------------------------------------------

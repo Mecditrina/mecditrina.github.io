@@ -32,10 +32,16 @@ rebuilds on commit.
 
 ## Privacy
 
-The pages make no requests to third parties: fonts are self-hosted in `assets/fonts/`, and the few JavaScript/CSS
-libraries are downloaded at build time (`third_party_libraries` with `download: true` in `_config.yml`). The Tally
+The pages make no requests to third parties: fonts are self-hosted in `assets/fonts/`, and the two JavaScript/CSS
+libraries (Font Awesome, back-to-top button) are committed in `assets/vendor/`, so builds need no network access. The Tally
 request form is click-to-load: nothing is requested from Tally until the visitor clicks "Show the request form".
 Keep it that way for any future embed, and keep both legal notices in line.
+
+## Updating the vendored libraries
+
+Font Awesome and vanilla-back-to-top are not downloaded at build time. To update one, replace its files in
+`assets/vendor/` with those of the new npm release, then update `version` and the SRI `integrity` hash in
+`third_party_libraries` (`_config.yml`). Step-by-step commands are in `CLAUDE.md` ("Vendored libraries").
 
 ## Preview mode
 
